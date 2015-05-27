@@ -1,17 +1,6 @@
 ---
-- name: Assure sudo installed
-  apt: pkg={{item}} state=installed
-  with_items:
-    - sudo
+- include: Photon.yml
+  when: ansible_distribution == 'NA'
 
-- name: Assure sudo users created
-  user: name={{ item }} groups={{ item }} state=present append=yes
-  with_items: sudo_users
-
-- name: Assure sudo users created and sudo capable
-  user: name={{ item }} groups=sudo append=yes
-  with_items: sudo_users
-
-- name: Setup passwordless sudo
-  template: src=sudoers.j2 dest="/etc/sudoers.d/{{ item }}" owner=root group=root mode=0600
-  with_items: sudo_users
+- include: Debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
