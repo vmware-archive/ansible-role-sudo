@@ -1,4 +1,7 @@
 ---
+- name: Assure yum installed
+  command: tdnf install -y yum
+
 - name: Assure sudo installed
   yum: pkg={{ item }} state=installed
   with_items:
