@@ -1,6 +1,12 @@
 ---
+- name: check if yum is installed
+  command: rpm -q yum
+  register: yum_installed
+  ignore_errors: yes
+
 - name: Assure yum installed
   command: tdnf install -y yum
+  when: yum_installed.rc == 1
 
 - name: Assure sudo installed
   yum: pkg={{ item }} state=installed
