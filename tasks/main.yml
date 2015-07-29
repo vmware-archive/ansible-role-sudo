@@ -1,6 +1,6 @@
 ---
 - include: Photon.yml
-  when: ansible_distribution == 'NA'
+  when: ansible_lsb.codename == 'Photon'
 
 - include: Debian.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
