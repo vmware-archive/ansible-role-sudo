@@ -20,7 +20,7 @@ A list of users to which to add passwordless sudo rights.
 
 ```
 ---
-- hosts: supervio
+- hosts: sudohosts
   sudo: True
   connection: local
   roles:
