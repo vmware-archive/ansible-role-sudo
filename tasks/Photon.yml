@@ -42,5 +42,20 @@
   with_items: sudo_users
 
 - name: Setup passwordless sudo
-  template: src=sudoers.j2 dest="/etc/sudoers.d/{{ item.userid }}" owner=root group=root mode=0600
+  template:
+    src=sudoers.j2
+    dest="/etc/sudoers.d/{{ item.userid }}"
+    owner=root
+    group=root
+    mode=0600
   with_items: sudo_users
+
+# Fixup sudoers file
+# This is necessary so users don't get overwridden unexpexpectedly
+# by commands after the include in /etc/sudoers
+
+- name: Remove, temporarily, the includedir line from /etc/sudoers
+  lineinfile: dest=/etc/sudoers state=absent line="#includedir /etc/sudoers.d"
+
+- name: Insert the includedir line last in /etc/sudoers
+  lineinfile: dest=/etc/sudoers state=present line="#includedir /etc/sudoers.d"
