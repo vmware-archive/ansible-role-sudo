@@ -1,0 +1,41 @@
+language: python
+python: "2.7"
+
+sudo: required
+
+env:
+  - image: ubuntu
+    tag: 14.04
+    init: /sbin/init
+    run_opts: ""
+    role: sudo
+  - image: photon
+    tag: latest
+    init:
+    run_opts: ""
+    role: sudo
+
+
+services:
+  - docker
+
+before_install:
+  - sudo docker pull ${image}:${tag}
+  - sudo docker build --rm=true --file=tests/dockerfiles/${image}-${tag} -t ${image}:local .
+
+install:
+  - container_id=$(mktemp)
+  - sudo docker run --detach --volume=$(pwd):/etc/ansible/roles/${role}:ro ${run_opts} ${image}:local ${init} > "${container_id}"
+
+script:
+  # syntax test
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm /usr/bin/ansible-playbook /etc/ansible/roles/${role}/tests/test.yml --syntax-check
+
+  # run once
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm /usr/bin/ansible-playbook /etc/ansible/roles/${role}/tests/test.yml
+
+  - >
+    sudo docker exec "$(cat ${container_id})" env ANSIBLE_NOCOLOR=1 /usr/bin/ansible-playbook /etc/ansible/roles/${role}/tests/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)

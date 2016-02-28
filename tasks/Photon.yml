@@ -14,14 +14,9 @@
 #  limitations under the License.
 #
 ---
-- name: check if yum is installed
-  command: rpm -q yum
-  register: yum_installed
-  ignore_errors: yes
+- name: Assure yum is installed
+  command: bash -c "rpm -q yum || tdnf install -y yum" creates=/usr/bin/yum
 
-- name: Assure yum installed
-  command: tdnf install -y yum
-  when: yum_installed.rc == 1
 
 - name: Assure sudo installed
   yum: pkg={{ item }} state=installed
@@ -51,13 +46,19 @@
   with_items: sudo_users
 
 # Fixup sudoers file
-# This is necessary so users don't get overwridden unexpexpectedly
+# This is necessary so users don't get overidden unexpectedly
 # by commands after the include in /etc/sudoers
+
+- name: check if includedir is last in file
+  command: bash -c "tail -n1 /etc/sudoers | grep '#includedir /etc/sudoers.d'"
+  register: sudo_include_on_last_line
+  changed_when: false
+  ignore_errors: yes
 
 - name: Remove, temporarily, the includedir line from /etc/sudoers
   lineinfile: dest=/etc/sudoers state=absent line="#includedir /etc/sudoers.d"
-  when: sudo_users|length > 0
+  when: sudo_users|length > 0 and sudo_include_on_last_line.rc != 0
 
 - name: Insert the includedir line last in /etc/sudoers
-  lineinfile: dest=/etc/sudoers state=present line="#includedir /etc/sudoers.d"
+  lineinfile: dest=/etc/sudoers state=present regexp='#includedir /etc/sudoers.d' line="#includedir /etc/sudoers.d"
   when: sudo_users|length > 0

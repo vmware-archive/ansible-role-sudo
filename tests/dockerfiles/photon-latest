@@ -1,0 +1,41 @@
+FROM photon:latest
+
+
+
+RUN curl -L https://bintray.com/vmware/photon_release_1.0_x86_64/rpm -o /etc/yum.repos.d/bintray-vmware-photon_release_1.0_x86_64.repo
+
+RUN tdnf install -y python2 ;\
+ tdnf install -y python-xml ;\
+ tdnf install -y python2-libs ;\
+ tdnf install -y python2-tools ;\
+ tdnf install -y python2-devel ;\
+ tdnf install -y openssh ;\
+ tdnf install -y sed ;\
+ tdnf install -y gawk ;\
+ tdnf install -y gcc ;\
+ tdnf install -y make ;\
+ tdnf install -y autoconf ;\
+ tdnf install -y automake ;\
+ tdnf install -y git ;\
+ tdnf install -y tar ;\
+ tdnf install -y linux-api-headers ;\
+ tdnf install -y gzip ;\
+ tdnf install -y glibc ;\
+ tdnf install -y glibc-devel ;\
+ tdnf install -y curl ;\
+ tdnf install -y yum ;\
+ tdnf install -y binutils
+
+RUN curl -L -O https://bootstrap.pypa.io/get-pip.py
+RUN python get-pip.py
+
+# Install Ansible
+RUN pip install ansible
+
+# Install Ansible inventory file
+RUN mkdir -p /etc/ansible
+RUN echo "[local]" > /etc/ansible/hosts
+RUN echo "localhost ansible_connection=local" >> /etc/ansible/hosts
+
+RUN /usr/bin/ssh-keygen -A
+CMD ["/usr/sbin/sshd", "-D"]
