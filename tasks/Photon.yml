@@ -17,7 +17,6 @@
 - name: Assure yum is installed
   command: bash -c "rpm -q yum || tdnf install -y yum" creates=/usr/bin/yum
 
-
 - name: Assure sudo installed
   yum: pkg={{ item }} state=installed
   with_items:
@@ -25,7 +24,7 @@
 
 - name: Assure groups created for all users
   group: name={{ item.group }} state=present
-  with_items: sudo_users
+  with_items: "{{ sudo_users }}"
 
 - name: Assure sudo users created
   user:
@@ -34,7 +33,7 @@
     password: "{{ item.password }}"
     state: present
     append: yes
-  with_items: sudo_users
+  with_items: "{{ sudo_users }}"
 
 - name: Setup passwordless sudo
   template:
@@ -43,7 +42,7 @@
     owner=root
     group=root
     mode=0600
-  with_items: sudo_users
+  with_items: "{{ sudo_users }}"
 
 # Fixup sudoers file
 # This is necessary so users don't get overidden unexpectedly
