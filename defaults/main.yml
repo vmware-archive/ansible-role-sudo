@@ -15,4 +15,5 @@
 #
 ---
 sudo_users:
-  - { userid: vmware, group: vmware, password: "$6$qIze9/RaQ$aX/a6mCfI2MHpbzJ/4aYogc59/pvuo3ECo6I1jDPPjPKsdNDWN5JNOQFuFJDC/4oc60zfv1QTimsPNXfDyIs.0" }
+# default crypted password is vmwarevmware
+  - { userid: vmware, group: vmware, password: "$6$aiJ7diDpe$1h6v0p9We7OgUKYOfgXPGtvuMmqrNgUNQAXwjpjLBht0Uc/WGZhghQbUF6/cz36WasRKX0taJSp3nCy3hFZ1F1" }
