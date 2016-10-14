@@ -30,7 +30,6 @@
   user:
     name: "{{ item.userid }}"
     groups: "{{ item.group }}"
-    password: "{{ item.password }}"
     state: present
     append: yes
   with_items: "{{ sudo_users }}"
