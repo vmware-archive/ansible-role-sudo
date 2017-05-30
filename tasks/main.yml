@@ -15,7 +15,10 @@
 #
 ---
 - include: Photon.yml
-  when: ansible_lsb.codename == 'Photon'
+  when: ansible_distribution == 'VMware Photon'
 
 - include: Debian.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: RedHat.yml
+  when: ansible_os_family == "RedHat"
