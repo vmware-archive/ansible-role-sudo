@@ -14,5 +14,21 @@
 #  limitations under the License.
 #
 ---
-sudo_users:
-  - { userid: vmware, group: vmware }
+- name: Assure sudo installed
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - sudo
+
+- name: Assure groups created for all users
+  group: name={{ item.group }} state=present
+  with_items: "{{ sudo_users }}"
+
+- name: Assure sudo users created
+  user: name={{ item.userid }} groups={{ item.group }} state=present append=yes
+  with_items: "{{ sudo_users }}"
+
+- name: Setup passwordless sudo
+  template: src=sudoers.j2 dest="/etc/sudoers.d/{{ item.userid }}" owner=root group=root mode=0600
+  with_items: "{{ sudo_users }}"
