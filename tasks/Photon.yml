@@ -5,9 +5,7 @@
   command: bash -c "rpm -q yum || tdnf install -y yum" creates=/usr/bin/yum
 
 - name: Assure sudo installed
-  yum: pkg={{ item }} state=installed
-  with_items:
-    - sudo
+  yum: pkg="sudo" state=present
 
 - name: Assure groups created for all users
   group: name={{ item.group }} state=present
