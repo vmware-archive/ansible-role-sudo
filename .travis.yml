@@ -8,7 +8,7 @@ services:
   - docker
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install docker.io  # Install latest docker-ce
+  - sudo apt-get install -y docker.io  # Install latest docker-ce
 install:
   - pip install molecule
   # - pip install required driver (e.g. docker, python-vagrant, shade)
