@@ -2,9 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-only
 ---
 - name: Assure sudo installed
-  apt: pkg={{ item }} state=installed
-  with_items:
-    - sudo
+  apt: pkg="sudo" state=present
 
 - name: Assure groups created for all users
   group: name={{ item.group }} state=present
