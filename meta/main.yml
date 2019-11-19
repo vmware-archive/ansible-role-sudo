@@ -3,6 +3,7 @@
 ---
 galaxy_info:
   description: Install sudo
+  author: Tom Hite
   company: VMware
   license: license (Apache-2.0, GPLv3)
   min_ansible_version: 2.1
