@@ -8,7 +8,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_hosts_file(host):
-    f = host.file('/etc/hosts')
+    f = host.file('/usr/bin/sudo')
 
     assert f.exists
     assert f.user == 'root'
