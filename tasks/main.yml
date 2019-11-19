@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-only
 ---
 - include: Photon.yml
-  when: ansible_distribution == 'VMware Photon'
+  when: ansible_distribution == 'VMware Photon' or ansible_distribution == 'VMware Photon OS'
 
 - include: Debian.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
