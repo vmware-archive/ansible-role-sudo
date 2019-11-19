@@ -1,0 +1,28 @@
+# Copyright © 2017 VMware, Inc. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0 OR GPL-3.0-only
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  options:
+    config-data:
+      ignore: venv
+platforms:
+  - name: centos-7
+    image: centos:7
+  - name: photon-3
+    image: photon:3.0
+  - name: ubuntu-xenial
+    image: ubuntu
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
